@@ -3,61 +3,75 @@
     <script>
         const choices = ['rock', 'paper', 'scissors'];
 
+        // Determine what to play against the user.
         function computerPlay() {
             return choices[Math.floor(Math.random() * choices.length)];
         }
 
-        // This function returns null if the players tied; it otherwise returns a boolean describing if the player won.
-        // It also performs a side effect of describing the result via the console.
-        function playRound(playerSelection, computerSelection) {
-            playerSelection = playerSelection.toLowerCase();
-
-            if (playerSelection === computerSelection) {
-                console.log(`Tie! Both players chose ${playerSelection}`);
-                return null;
+        // Prompt and perform simple validation of received input.
+        function getPlayerSelection() {
+            let playerSelection = '';
+            while (!choices.includes(playerSelection)) {
+                playerSelection = prompt('Rock, Paper, or Scissors?', 'paper').toLowerCase();
             }
+            return playerSelection;
+        }
 
+        // Return null if the players tied; otherwise return if the player won.
+        function playRound(playerSelection, computerSelection) {
             let playerWon;
-            if (playerSelection === 'rock') 
-                (computerSelection === 'scissors') ? playerWon = true : playerWon = false;
+            if (playerSelection === computerSelection)
+                playerWon = null;            
+            else if (playerSelection === 'rock') 
+                playerWon = computerSelection === 'scissors';
             else if (playerSelection === 'paper') 
-                (computerSelection === 'rock') ? playerWon = true : playerWon = false;
+                playerWon = computerSelection === 'rock';
             else if (playerSelection === 'scissors') 
-                (computerSelection === 'paper') ? playerWon = true : playerWon = false;
-
-            if (playerWon)
-                console.log(`You win! Your choice of ${playerSelection} beats ${computerSelection}!`);
-            else
-                console.log(`You lose! The computer's choice of ${computerSelection} beats ${playerSelection}!`);
+                playerWon = computerSelection === 'paper';
+            
+            announceRoundWinner(playerWon, playerSelection, computerSelection);
             return playerWon;
         }
 
-        // This function runs a game of 5 rounds and declares the overall winner (or a draw) at the end.
-        function game() {
-            let computerWins = 0;
-            let playerWins = 0;
-            for (let i = 0; i < 5; ++i) {
-                let computerSelection = computerPlay();
-                let playerSelection = '';
-                while (!choices.includes(playerSelection)) { // Simple input validation
-                    playerSelection = prompt('Rock, Paper, or Scissors?', 'paper');
-                }
-
-                let result = playRound(playerSelection, computerSelection)
-                if (result === null) {
-                    continue;
-                } else {
-                    (result) ? ++playerWins : ++computerWins;
-                } 
+        // Describe the results of a round via the console.
+        function announceRoundWinner(playerWon, playerSelection, computerSelection) {
+            if (playerWon === null) {
+                console.log(`Tie! Both players chose ${playerSelection}`);
+            } else {
+                playerWon ? console.log(`You win! Your choice of ${playerSelection} beats ${computerSelection}!`) :
+                            console.log(`You lose! The computer's choice of ${computerSelection} beats ${playerSelection}!`);
             }
-            
+        }
+
+        // Announce the results of `game()` via the console.
+        function announceChampion(playerWins, computerWins) {
             if (playerWins > computerWins) {
                 console.log(`Congrats! You won by ${playerWins - computerWins}!`);
             } else if (playerWins < computerWins) {
                 console.log(`Bummer! You lost by ${computerWins - playerWins}!`);
             } else {
-                console.log(`Close game! You tied with ${playerWins} each!`);
+                console.log(`Close game! You tied with ${playerWins} wins each!`);
             }
+        }
+
+        // Run a game of 5 rounds of "Rock, Paper, Scissors".
+        function game() {
+            let computerWins = 0;
+            let playerWins = 0;
+            for (let round = 0; round < 5; ++round) {
+                // Determine the round's choices
+                let computerSelection = computerPlay();
+                let playerSelection = getPlayerSelection();
+
+                let result = playRound(playerSelection, computerSelection)
+                if (result === null) {
+                    continue;
+                } else {
+                    result ? ++playerWins : ++computerWins;
+                } 
+            }
+            
+            announceChampion(playerWins, computerWins);
         }
 
         game();
