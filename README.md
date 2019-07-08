@@ -1,5 +1,5 @@
 ## The First Odin on Rails JS [Project](https://www.theodinproject.com/courses/web-development-101/lessons/rock-paper-scissors)
-This project is meant to demonstrate basic understanding of Javascript, including basic syntax, conditionals, and functions.
+The first instruction set demands use of the console and `prompt()` rather than a GUI, and is meant to demonstrate basic understanding of Javascript, including basic syntax, conditionals, and functions. The second instruction asks to revisit the project and remove use of the console and instead implement a GUI with buttons and proper event listening to handle the games in matches of 5.
 
 ### Reflections
 Beyond the HTML and browser use in testing, the coding for this project felt similar to coding in C, with only a few JS-specific syntaxes and tricks that wouldn't work in a C-like language. My previous experiences with C, C++, and Rust made this a relatively smooth and quick project.
